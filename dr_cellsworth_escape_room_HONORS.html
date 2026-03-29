@@ -53,12 +53,13 @@
   }
 
   .screen { display: none; position: relative; z-index: 1; }
-  .screen.active { display: block; }
+  #intro.active  { display: flex; }
+  #game.active   { display: block; }
+  #win.active    { display: flex; }
 
   /* ===== INTRO ===== */
   #intro {
     min-height: 100vh;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -576,7 +577,6 @@
   /* Win screen */
   #win {
     min-height: 100vh;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
