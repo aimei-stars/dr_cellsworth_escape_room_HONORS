@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dr. Cellsworth's Lab — HONORS Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
 
   :root {
     --bg: #0a0e1a;
@@ -710,18 +712,6 @@
 
   <div class="flex-center">
     <button class="btn btn-primary" onclick="restartGame()">🔄 PLAY AGAIN</button>
-    <button class="btn btn-secondary" onclick="showTeacherKey()">📋 TEACHER KEY</button>
-  </div>
-</div>
-
-<!-- ===== TEACHER KEY MODAL ===== -->
-<div id="teacherModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;overflow-y:auto;padding:20px;">
-  <div style="max-width:720px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="font-family:'Orbitron',monospace;color:var(--purple);font-size:1.1rem;">📋 TEACHER ANSWER KEY — HONORS</div>
-      <button onclick="document.getElementById('teacherModal').style.display='none'" class="btn btn-secondary" style="padding:6px 14px;font-size:0.75rem;">✕ CLOSE</button>
-    </div>
-    <div id="teacherKeyContent"></div>
   </div>
 </div>
 
@@ -1307,46 +1297,7 @@ function spawnConfetti() {
 
 function restartGame() { showScreen('intro'); }
 
-// =====================================================
-//  TEACHER KEY
-// =====================================================
-function showTeacherKey() {
-  const fullCode = PUZZLES.map(p => p.codeDigit).join('-');
-  const rounds = PUZZLES.map(p => {
-    let answerBlock = '';
-    if (p.type === 'multiselect') {
-      const correct = p.correctIndices.map(i => `<li style="margin-bottom:4px;">${p.items[i].text.substring(0,80)}...</li>`).join('');
-      answerBlock = `<strong>Correct selections (${p.correctIndices.length}):</strong><ul style="margin:6px 0 0 16px;">${correct}</ul>`;
-    } else if (p.type === 'mcq' || p.type === 'mcq_evidence') {
-      answerBlock = `<strong>Answer:</strong> ${String.fromCharCode(65+p.answer)} — ${p.choices[p.answer].substring(0,100)}...`;
-    } else if (p.type === 'multicell') {
-      answerBlock = p.cells.map(c => `<div>Specimen ${c.id}: <strong style="color:#39ff14;">${c.answer.toUpperCase()} CELL</strong></div>`).join('');
-    }
-    return `<div style="margin-bottom:18px;padding:14px;background:var(--panel2);border-radius:8px;border-left:3px solid var(--purple);">
-      <div style="font-family:'Orbitron',monospace;color:var(--purple);font-size:0.8rem;margin-bottom:4px;">
-        ${p.roundLabel} — Code Digit: <strong style="color:var(--gold);">${p.codeDigit}</strong> (${p.points} pts max)
-      </div>
-      <div style="font-weight:700;margin-bottom:8px;">${p.title}</div>
-      <div style="font-size:0.88rem;">${answerBlock}</div>
-      <div style="margin-top:8px;font-size:0.82rem;color:var(--dim);">${p.explanation || ''}</div>
-    </div>`;
-  }).join('');
 
-  document.getElementById('teacherKeyContent').innerHTML = `
-    <div style="background:rgba(255,215,0,0.1);border:1px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--dim);margin-bottom:4px;">HONORS ESCAPE CODE</div>
-      <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:8px;">${fullCode}</div>
-    </div>
-    ${rounds}
-    <div style="font-size:0.85rem;color:var(--dim);margin-top:16px;padding:12px;background:var(--panel2);border-radius:6px;">
-      <strong style="color:var(--purple);">NGSS:</strong> MS-LS1-1 &nbsp;|&nbsp;
-      <strong style="color:var(--purple);">SEP:</strong> Analyzing &amp; Interpreting Data, Constructing Explanations &nbsp;|&nbsp;
-      <strong style="color:var(--purple);">CCC:</strong> Structure and Function, Cause and Effect<br><br>
-      <strong style="color:var(--warn);">Debrief suggestions:</strong> "What made Round 3 (virus) the hardest?" / "Could you design a better experiment for Round 4?" / "What would you need to see to change your answer on Round 5?"
-    </div>`;
-
-  document.getElementById('teacherModal').style.display = 'block';
-}
 </script>
 </body>
 </html>
