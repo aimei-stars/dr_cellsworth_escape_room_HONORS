@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Cellsworth's Lab — HONORS Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --panel: #111827;
+    --panel2: #1a2235;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #39ff14;
+    --warn: #ff6b35;
+    --red: #ff2d55;
+    --gold: #ffd700;
+    --purple: #c084fc;
+    --text: #c8d8e8;
+    --dim: #5a7a9a;
+    --plant: #39ff14;
+    --animal: #ff6b35;
+    --both: #00d4ff;
+    --glow: 0 0 20px rgba(0,212,255,0.4);
+    --glow2: 0 0 20px rgba(57,255,20,0.4);
+    --glow-purple: 0 0 20px rgba(192,132,252,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(192,132,252,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192,132,252,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .screen { display: none; position: relative; z-index: 1; }
+  .screen.active { display: block; }
+
+  /* ===== INTRO ===== */
+  #intro {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .honors-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #7c3aed, #c084fc);
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--glow-purple);
+  }
+
+  .lab-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--purple);
+    text-shadow: var(--glow-purple);
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    animation: flicker 4s infinite;
+  }
+
+  @keyframes flicker {
+    0%,95%,100% { opacity: 1; }
+    96% { opacity: 0.6; }
+    97% { opacity: 1; }
+    98% { opacity: 0.4; }
+  }
+
+  .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--warn);
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  .story-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 8px;
+    padding: 24px 28px;
+    max-width: 700px;
+    text-align: left;
+    margin: 0 auto 28px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .story-box p { margin-bottom: 12px; }
+  .story-box p:last-child { margin-bottom: 0; }
+  .story-box strong { color: var(--purple); }
+
+  .mission-header {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--accent2);
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+
+  .team-setup {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto 28px;
+    width: 100%;
+  }
+
+  .team-setup label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--dim);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .team-setup input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--purple);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .team-setup input:focus { border-color: var(--purple); box-shadow: var(--glow-purple); }
+
+  .btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--purple);
+    color: white;
+    box-shadow: var(--glow-purple);
+  }
+  .btn-primary:hover { background: #d8b4fe; transform: translateY(-2px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--purple);
+    border: 1px solid var(--purple);
+  }
+  .btn-secondary:hover { background: rgba(192,132,252,0.1); }
+
+  .btn-green {
+    background: var(--accent2);
+    color: var(--bg);
+    box-shadow: var(--glow2);
+  }
+  .btn-green:hover { background: #5fff3a; transform: translateY(-2px); }
+
+  .btn-warn { background: var(--warn); color: white; }
+  .btn-red { background: var(--red); color: white; border: none; }
+
+  /* ===== GAME HEADER ===== */
+  .game-header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .team-display {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--purple);
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+  }
+
+  .progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--purple); border-radius: 3px; transition: width 0.6s ease; box-shadow: var(--glow-purple); }
+  .progress-text { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--dim); white-space: nowrap; }
+
+  .timer-display {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent2);
+    text-shadow: var(--glow2);
+    min-width: 90px;
+    text-align: right;
+  }
+  .timer-display.warning { color: var(--red); animation: pulse 0.5s infinite; }
+
+  .score-display {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+
+  /* ===== PUZZLE LAYOUT ===== */
+  .puzzle-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .round-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--purple);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .honors-tag {
+    background: rgba(192,132,252,0.15);
+    border: 1px solid var(--purple);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.65rem;
+    color: var(--purple);
+    letter-spacing: 2px;
+  }
+
+  .puzzle-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 6px;
+  }
+
+  .puzzle-flavor {
+    color: var(--warn);
+    font-style: italic;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+
+  .puzzle-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .puzzle-question {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #e0ecf8;
+  }
+
+  /* Context / scenario block */
+  .scenario-block {
+    background: var(--panel2);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #d0e4f4;
+  }
+
+  .scenario-block .scenario-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+
+  /* Evidence cards */
+  .evidence-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .evidence-card {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .evidence-card .ev-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    color: var(--purple);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  /* MCQ */
+  .choices { display: grid; gap: 10px; }
+
+  .choice-btn {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    border-color: var(--purple);
+    background: rgba(192,132,252,0.08);
+    transform: translateX(4px);
+  }
+
+  .choice-btn.correct { border-color: var(--accent2); background: rgba(57,255,20,0.1); color: var(--accent2); }
+  .choice-btn.wrong { border-color: var(--red); background: rgba(255,45,85,0.08); color: var(--red); text-decoration: line-through; }
+  .choice-btn.partial { border-color: var(--gold); background: rgba(255,215,0,0.08); color: var(--gold); }
+
+  .choice-letter {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    background: var(--border);
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Multi-select */
+  .multiselect-item {
+    background: var(--panel2);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.97rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    user-select: none;
+  }
+
+  .multiselect-item:hover { border-color: var(--purple); background: rgba(192,132,252,0.07); }
+  .multiselect-item.selected { border-color: var(--purple); background: rgba(192,132,252,0.15); }
+  .multiselect-item.correct-sel { border-color: var(--accent2); background: rgba(57,255,20,0.1); color: var(--accent2); }
+  .multiselect-item.wrong-sel { border-color: var(--red); background: rgba(255,45,85,0.08); }
+  .multiselect-item.missed { border-color: var(--gold); background: rgba(255,215,0,0.07); }
+
+  .check-box {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+
+  .multiselect-item.selected .check-box { border-color: var(--purple); background: rgba(192,132,252,0.3); }
+  .multiselect-item.correct-sel .check-box { border-color: var(--accent2); background: rgba(57,255,20,0.3); }
+
+  .multiselect-instruction {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--dim);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  /* Feedback */
+  .feedback-box {
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct-fb { background: rgba(57,255,20,0.1); border: 1px solid var(--accent2); color: var(--accent2); }
+  .feedback-box.wrong-fb { background: rgba(255,45,85,0.1); border: 1px solid var(--red); color: #ff8fa3; }
+  .feedback-box.partial-fb { background: rgba(255,215,0,0.08); border: 1px solid var(--gold); color: var(--gold); }
+
+  /* Hint */
+  .hint-toggle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--dim);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    text-decoration: underline;
+    padding: 4px 0;
+    transition: color 0.2s;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .hint-toggle:hover { color: var(--purple); }
+
+  .hint-box {
+    background: rgba(192,132,252,0.07);
+    border: 1px solid rgba(192,132,252,0.3);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: var(--purple);
+    margin-bottom: 12px;
+    display: none;
+  }
+  .hint-box.show { display: block; }
+  .hint-used { color: var(--warn); font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .flex-center { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  /* Mystery cell cards (Round 5) */
+  .cell-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .cell-card {
+    background: var(--panel2);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .cell-card.answered-correct { border-color: var(--accent2); }
+  .cell-card.answered-wrong { border-color: var(--red); }
+
+  .cell-card-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+
+  .cell-card-desc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #d0e4f4;
+    margin-bottom: 12px;
+  }
+
+  .cell-card-choices {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cell-choice-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cell-choice-btn:hover:not(:disabled) { border-color: var(--purple); color: var(--purple); }
+  .cell-choice-btn.correct { border-color: var(--accent2); color: var(--accent2); background: rgba(57,255,20,0.1); }
+  .cell-choice-btn.wrong { border-color: var(--red); color: var(--red); background: rgba(255,45,85,0.08); text-decoration: line-through; }
+
+  .cell-card-feedback {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .cell-card-feedback.show { display: block; }
+
+  /* Win screen */
+  #win {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .win-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    color: var(--purple);
+    text-shadow: var(--glow-purple);
+    animation: winPulse 1.5s infinite;
+    margin-bottom: 8px;
+  }
+
+  @keyframes winPulse {
+    0%,100% { text-shadow: 0 0 20px rgba(192,132,252,0.4); }
+    50% { text-shadow: 0 0 60px rgba(192,132,252,0.9), 0 0 120px rgba(192,132,252,0.5); }
+  }
+
+  .win-sub { color: var(--accent); font-size: 1.1rem; margin-bottom: 28px; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto 28px;
+  }
+
+  .result-stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .result-val { font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 900; color: var(--purple); }
+  .result-label { font-size: 0.8rem; color: var(--dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+
+  .final-cell-reveal {
+    background: var(--panel2);
+    border: 2px solid var(--purple);
+    border-radius: 12px;
+    padding: 20px 28px;
+    max-width: 520px;
+    margin: 0 auto 24px;
+    box-shadow: var(--glow-purple);
+  }
+
+  .final-cell-reveal h3 { font-family: 'Orbitron', monospace; color: var(--purple); font-size: 1rem; margin-bottom: 10px; }
+  .cell-type-badge { font-family: 'Orbitron', monospace; font-size: 1.8rem; font-weight: 900; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.6); }
+
+  .confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
+  .confetti-piece {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 1px;
+    animation: confettiFall linear forwards;
+    opacity: 0;
+  }
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+  }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .mt-12 { margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ===== INTRO ===== -->
+<div id="intro" class="screen active">
+  <div class="honors-badge">⚗️ HONORS EDITION</div>
+  <div class="lab-title">DR. CELLSWORTH'S<br>INFECTED LAB</div>
+  <div class="subtitle">⚠ ADVANCED AGENT CLEARANCE REQUIRED ⚠</div>
+
+  <div class="story-box">
+    <p class="mission-header">📡 PRIORITY ALPHA — HONORS BRIEFING</p>
+    <p>The virus has done more damage than we thought. It didn't just scramble the labels — it <strong>corrupted the lab's logic systems</strong> and planted false scientific claims throughout Dr. Cellsworth's database.</p>
+    <p>Standard agents can identify organelles. <strong>You need to think like a scientist.</strong> That means analyzing consequences, spotting bad reasoning, challenging edge cases, and building arguments from evidence.</p>
+    <p>Five advanced challenges stand between you and escape. Work as a team. Think critically. 🔬</p>
+  </div>
+
+  <div class="team-setup">
+    <label>TEAM NAME</label>
+    <input type="text" id="teamNameInput" placeholder="Enter your team name..." maxlength="30">
+    <label>NUMBER OF TEAM MEMBERS</label>
+    <input type="number" id="teamSizeInput" placeholder="2–4 students" min="1" max="6" value="2">
+  </div>
+
+  <button class="btn btn-primary" onclick="startGame()">🔬 ENTER THE LAB</button>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="game" class="screen">
+  <div class="game-header">
+    <div class="team-display" id="teamLabel">Team: —</div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">0/5</div>
+    </div>
+    <div class="score-display">⭐ <span id="scoreDisplay">0</span> pts</div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+  </div>
+  <div class="puzzle-container" id="puzzleContainer"></div>
+</div>
+
+<!-- ===== WIN ===== -->
+<div id="win" class="screen">
+  <div class="confetti-wrap" id="confettiWrap"></div>
+  <div class="win-title">🎉 LAB ESCAPED!</div>
+  <div class="win-sub" id="winSub">Advanced clearance confirmed. Dr. Cellsworth's lab is safe.</div>
+
+  <div class="final-cell-reveal">
+    <h3>🔬 MYSTERY CELL CONFIRMED</h3>
+    <p style="color:var(--dim);font-size:0.9rem;margin-bottom:10px;">Based on your evidence analysis, the cells were...</p>
+    <div class="cell-type-badge">IDENTIFIED ✓</div>
+    <p style="margin-top:12px;font-size:0.9rem;color:var(--text);">Cell A: Plant 🌿 &nbsp;|&nbsp; Cell B: Animal 🐾 &nbsp;|&nbsp; Cell C: Plant 🌿 &nbsp;|&nbsp; Cell D: Animal 🐾</p>
+  </div>
+
+  <div class="results-grid">
+    <div class="result-stat"><div class="result-val" id="finalScore">0</div><div class="result-label">POINTS</div></div>
+    <div class="result-stat"><div class="result-val" id="finalTime">—</div><div class="result-label">TIME LEFT</div></div>
+    <div class="result-stat"><div class="result-val" id="finalHints">0</div><div class="result-label">HINTS USED</div></div>
+    <div class="result-stat"><div class="result-val" id="finalAccuracy">—</div><div class="result-label">ACCURACY</div></div>
+  </div>
+
+  <div class="flex-center">
+    <button class="btn btn-primary" onclick="restartGame()">🔄 PLAY AGAIN</button>
+    <button class="btn btn-secondary" onclick="showTeacherKey()">📋 TEACHER KEY</button>
+  </div>
+</div>
+
+<!-- ===== TEACHER KEY MODAL ===== -->
+<div id="teacherModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;overflow-y:auto;padding:20px;">
+  <div style="max-width:720px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div style="font-family:'Orbitron',monospace;color:var(--purple);font-size:1.1rem;">📋 TEACHER ANSWER KEY — HONORS</div>
+      <button onclick="document.getElementById('teacherModal').style.display='none'" class="btn btn-secondary" style="padding:6px 14px;font-size:0.75rem;">✕ CLOSE</button>
+    </div>
+    <div id="teacherKeyContent"></div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+//  PUZZLE DATA — HONORS
+// =====================================================
+const PUZZLES = [
+
+  // ── ROUND 1: Cascading Failure (Multi-select) ──────────────────────────────
+  {
+    id: 1,
+    type: 'multiselect',
+    roundLabel: 'ROUND 1 OF 5 — CASCADING FAILURE ANALYSIS',
+    title: 'The Nucleus Is Gone',
+    flavor: 'The virus has completely destroyed the cell\'s nucleus. What breaks next?',
+    scenario: 'Dr. Cellsworth\'s lab log reads: "Subject cell: nucleus fully destroyed at T=0. All other organelles initially intact. Observe downstream effects over time." Your team must predict which organelles or functions will FAIL as a direct consequence — and why.',
+    question: 'Select ALL structures or functions that would FAIL or be severely disrupted after the nucleus is destroyed:',
+    instruction: 'SELECT ALL THAT APPLY — then click CHECK',
+    items: [
+      { text: 'Protein production would slow down and eventually stop — the nucleus holds the DNA instructions needed to build proteins.', correct: true },
+      { text: 'The cell membrane would immediately dissolve — it is made directly by the nucleus.', correct: false },
+      { text: 'Mitochondria would eventually stop functioning — they rely on proteins coded by nuclear DNA to operate.', correct: true },
+      { text: 'Cell reproduction (cell division) would become impossible — DNA in the nucleus is required to copy genetic information.', correct: true },
+      { text: 'Chloroplasts would immediately explode — the nucleus controls their internal pressure.', correct: false },
+      { text: 'The cell would lose the ability to repair damaged organelles — repair instructions are encoded in nuclear DNA.', correct: true },
+    ],
+    correctIndices: [0, 2, 3, 5],
+    hint: 'Think about what the nucleus DOES. Anything that depends on DNA instructions or protein production will eventually be affected.',
+    explanation: 'Correct effects: protein production stops (DNA → RNA → proteins), mitochondria eventually fail (need nuclear-coded proteins), cell division impossible (no DNA to copy), and repair breaks down. The cell membrane does NOT dissolve immediately — it was already built. Chloroplasts do not "explode" — they just stop being maintained.',
+    codeDigit: '8',
+    points: 300,
+    ngss: 'MS-LS1-1'
+  },
+
+  // ── ROUND 2: Claim Evaluator (MCQ — best rebuttal) ────────────────────────
+  {
+    id: 2,
+    type: 'mcq',
+    roundLabel: 'ROUND 2 OF 5 — CLAIM EVALUATOR',
+    title: 'Spot the Broken Reasoning',
+    flavor: 'A student left a false claim in Dr. Cellsworth\'s database. Find the best scientific rebuttal.',
+    scenario: 'A student wrote this in their lab report:\n\n"Plant cells and animal cells are basically the same thing. They both have a nucleus and a cell membrane, so any differences are minor and unimportant to how the cell works."',
+    question: 'Which response BEST refutes this claim with accurate scientific reasoning?',
+    choices: [
+      'The student is wrong because plant cells are bigger than animal cells, so they cannot be the same.',
+      'The student ignores that plant cells have a cell wall, chloroplasts, and a large central vacuole — structures that give plant cells completely different functions, including making their own food through photosynthesis. These are not minor differences.',
+      'The student is wrong because animal cells have mitochondria and plant cells do not.',
+      'The student is partially right — the nucleus is the most important organelle, and since both cells have one, the differences do not affect the main functions.',
+    ],
+    answer: 1,
+    hint: 'A strong rebuttal names SPECIFIC structures AND explains the FUNCTIONAL consequences of those differences — not just size or a single organelle.',
+    explanation: 'Choice B is the strongest rebuttal. It names the three unique structures (cell wall, chloroplasts, large vacuole), and connects them to a functional consequence (making food via photosynthesis). Choice A is weak — size is not the key scientific point. Choice C is factually wrong — plant cells DO have mitochondria. Choice D actually agrees with the bad claim.',
+    codeDigit: '5',
+    points: 300,
+    ngss: 'MS-LS1-1'
+  },
+
+  // ── ROUND 3: Edge Case Tribunal (MCQ) ─────────────────────────────────────
+  {
+    id: 3,
+    type: 'mcq_evidence',
+    roundLabel: 'ROUND 3 OF 5 — EDGE CASE TRIBUNAL',
+    title: 'Is a Virus Alive? Does It Have Cells?',
+    flavor: 'The virus infecting this lab has challenged Dr. Cellsworth\'s definition of "cell." Your team must rule.',
+    scenario: 'The virus left this message in the lab system:\n\n"I contain DNA. I can reproduce — inside a host cell. I evolve over time. Therefore, I am a living cell just like you."',
+    question: 'Which position is BEST supported by scientific evidence about what defines a cell?',
+    evidenceCards: [
+      { num: 'EVIDENCE A', text: 'Viruses contain genetic material (DNA or RNA) but have NO cell membrane, no cytoplasm, and no organelles of their own.' },
+      { num: 'EVIDENCE B', text: 'The cell theory states all living things are made of one or more cells, and all cells come from pre-existing cells.' },
+      { num: 'EVIDENCE C', text: 'Viruses cannot reproduce independently — they must hijack a host cell\'s machinery to copy themselves.' },
+      { num: 'EVIDENCE D', text: 'Most scientists classify viruses as non-living because they lack cellular structure and cannot carry out life processes on their own.' },
+    ],
+    choices: [
+      'The virus is correct — having DNA and the ability to reproduce is enough to qualify as a living cell.',
+      'The virus is partially right — it is alive, but it is not technically a cell because it lacks organelles.',
+      'The virus is wrong on both counts — it does not meet the definition of a cell (no membrane, cytoplasm, or organelles) and most scientists consider viruses non-living because they cannot function independently.',
+      'The virus is wrong only about being a cell — viruses are definitely alive because they evolve and contain DNA.',
+    ],
+    answer: 2,
+    hint: 'Focus on Evidence A and B. What does a cell REQUIRE? What does the virus LACK? Being able to evolve or carry DNA does not automatically make something a cell.',
+    explanation: 'Choice C is best supported. Evidence A confirms viruses lack the defining structures of cells (membrane, cytoplasm, organelles). Evidence B shows cell theory requires cellular structure. Evidence C shows viruses can\'t reproduce independently. This is genuinely contested in biology — some scientists argue viruses are "almost alive" — but the dominant scientific position is that lacking cellular structure and independent function disqualifies them as living cells.',
+    codeDigit: '2',
+    points: 350,
+    ngss: 'MS-LS1-1'
+  },
+
+  // ── ROUND 4: Experimental Design (Multi-select) ───────────────────────────
+  {
+    id: 4,
+    type: 'multiselect',
+    roundLabel: 'ROUND 4 OF 5 — EXPERIMENTAL DESIGN',
+    title: 'The Wilting Plant Investigation',
+    flavor: 'Something is wrong with the plant specimen in Dr. Cellsworth\'s lab. Design your investigation.',
+    scenario: 'Lab observation: A plant in Dr. Cellsworth\'s lab has begun wilting and turning yellow-green. Its leaves have become pale and it has stopped growing. You suspect the chloroplasts may have stopped functioning. You need to design a simple investigation to test this hypothesis.',
+    question: 'Which of the following would be valid, scientific observations or steps to include in an investigation testing whether the chloroplasts have failed? Select ALL that apply:',
+    instruction: 'SELECT ALL VALID INVESTIGATION STEPS',
+    items: [
+      { text: 'Observe the color of the leaves over several days — functioning chloroplasts require chlorophyll, which gives leaves their green color. Yellowing suggests chlorophyll breakdown.', correct: true },
+      { text: 'Place one group of plants in light and another in complete darkness, then compare growth and color — this tests whether chloroplasts respond to light as expected.', correct: true },
+      { text: 'Measure the sugar content of the leaves — if chloroplasts are working, photosynthesis should produce sugars. Reduced sugar = reduced photosynthesis.', correct: true },
+      { text: 'Remove the cell walls from the plant cells — this will force the chloroplasts to work harder and reveal if they are functioning.', correct: false },
+      { text: 'Compare the wilting plant to a healthy plant under a microscope — look for changes in the number, color, or structure of chloroplasts in the cells.', correct: true },
+      { text: 'Water the plant more — if chloroplasts are broken, more water will repair them.', correct: false },
+    ],
+    correctIndices: [0, 1, 2, 4],
+    hint: 'A valid investigation step must actually test the chloroplast hypothesis. Ask: does this step give you evidence about whether chloroplasts are working — or not?',
+    explanation: 'Valid steps: observing color change (chlorophyll indicator), light vs. dark comparison (tests chloroplast light response), measuring sugar (tests photosynthesis output), and microscope comparison (directly observes chloroplast structure). Invalid: removing cell walls does not affect chloroplast function and would damage the cell. Watering more does not repair chloroplasts — that confuses vacuoles with chloroplasts.',
+    codeDigit: '6',
+    points: 350,
+    ngss: 'MS-LS1-1'
+  },
+
+  // ── ROUND 5: Multi-Cell Identification (4 mini-puzzles) ───────────────────
+  {
+    id: 5,
+    type: 'multicell',
+    roundLabel: 'ROUND 5 OF 5 — FINAL ESCAPE: CELL IDENTIFICATION',
+    title: 'Identify All Four Mystery Cells',
+    flavor: 'Four unknown cell specimens remain in the lab. Identify each one correctly to unlock the escape.',
+    question: 'Read each cell description carefully. For each cell, select whether it is a PLANT cell or an ANIMAL cell. You must get all four correct to earn full points.',
+    cells: [
+      {
+        id: 'A',
+        desc: 'This cell has a rigid outer boundary that maintains a fixed, boxy rectangular shape. Inside, small green disc-shaped structures are visible throughout the cytoplasm. A large central fluid-filled sac takes up about 90% of the cell\'s interior. A dark rounded control center is pressed against one side.',
+        answer: 'plant',
+        explanation: 'PLANT CELL 🌿 — Rigid outer boundary = cell wall. Green discs = chloroplasts. Large central sac = large central vacuole. All three are plant-only structures.'
+      },
+      {
+        id: 'B',
+        desc: 'This cell has an irregular, round shape that changes as it moves. It has no rigid outer layer — only a thin flexible boundary. There are no green structures visible. Multiple small oval-shaped energy producers are scattered throughout. Small storage sacs are present but none dominates the interior.',
+        answer: 'animal',
+        explanation: 'ANIMAL CELL 🐾 — Irregular shape = no cell wall. Thin flexible boundary = cell membrane only. No green structures = no chloroplasts. Small vacuoles, not a large central one. All consistent with animal cell.'
+      },
+      {
+        id: 'C',
+        desc: 'This cell is rectangular and its outer wall is clearly visible under the microscope. The interior is mostly empty space — a single enormous sac filled with water. The green pigment-containing organelles are clustered near the edges of the cell. The nucleus is also pushed to the edge.',
+        answer: 'plant',
+        explanation: 'PLANT CELL 🌿 — Rectangular with visible outer wall = cell wall. Enormous water sac = large central vacuole. Green pigment organelles near edges = chloroplasts (displaced by the vacuole). Nucleus pushed to edge is also characteristic of plant cells with large vacuoles.'
+      },
+      {
+        id: 'D',
+        desc: 'This cell contains a prominent nucleus, many mitochondria, and a cell membrane. It does not have a cell wall. It cannot produce its own food — it must consume organic molecules from its environment. Its shape is flexible and changes in response to its surroundings.',
+        answer: 'animal',
+        explanation: 'ANIMAL CELL 🐾 — No cell wall, flexible shape, no chloroplasts (cannot make own food), must consume food = all defining animal cell characteristics. The presence of mitochondria alone doesn\'t distinguish it — both cell types have them.'
+      },
+    ],
+    hint: 'For each cell, ask three questions: (1) Is there a cell wall? (2) Are there chloroplasts? (3) Is there a large central vacuole? Any "yes" = plant cell.',
+    codeDigit: '0',
+    points: 400,
+    ngss: 'MS-LS1-1'
+  }
+];
+
+// =====================================================
+//  STATE
+// =====================================================
+let state = {
+  currentPuzzle: 0,
+  score: 0,
+  hintsUsed: 0,
+  totalAttempts: 0,
+  correctAnswers: 0,
+  timerInterval: null,
+  secondsLeft: 25 * 60,
+  teamName: '',
+  hintShown: new Array(PUZZLES.length).fill(false),
+  codeRevealed: [],
+  // per-puzzle state
+  multiSelected: [],        // Round 1 & 4
+  multiFeedbackShown: false,
+  cellAnswers: {},          // Round 5
+};
+
+// =====================================================
+//  INIT
+// =====================================================
+function startGame() {
+  state.teamName = document.getElementById('teamNameInput').value.trim() || 'Honors Agents';
+  state.currentPuzzle = 0;
+  state.score = 0;
+  state.hintsUsed = 0;
+  state.totalAttempts = 0;
+  state.correctAnswers = 0;
+  state.secondsLeft = 25 * 60;
+  state.hintShown = new Array(PUZZLES.length).fill(false);
+  state.codeRevealed = [];
+  state.multiSelected = [];
+  state.multiFeedbackShown = false;
+  state.cellAnswers = {};
+
+  showScreen('game');
+  document.getElementById('teamLabel').textContent = '🧪 ' + state.teamName;
+  updateTimer();
+  startTimer();
+  renderPuzzle();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// =====================================================
+//  TIMER
+// =====================================================
+function startTimer() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(() => {
+    state.secondsLeft--;
+    updateTimer();
+    if (state.secondsLeft <= 0) { clearInterval(state.timerInterval); showWin(true); }
+  }, 1000);
+}
+
+function updateTimer() {
+  const m = Math.floor(state.secondsLeft / 60);
+  const s = state.secondsLeft % 60;
+  const el = document.getElementById('timerDisplay');
+  el.textContent = m + ':' + String(s).padStart(2, '0');
+  if (state.secondsLeft < 180) el.classList.add('warning');
+  else el.classList.remove('warning');
+}
+
+function updateScore() { document.getElementById('scoreDisplay').textContent = state.score; }
+
+function updateProgress() {
+  const pct = (state.currentPuzzle / PUZZLES.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = state.currentPuzzle + '/' + PUZZLES.length;
+}
+
+// =====================================================
+//  RENDER DISPATCH
+// =====================================================
+function renderPuzzle() {
+  updateProgress();
+  const p = PUZZLES[state.currentPuzzle];
+  const c = document.getElementById('puzzleContainer');
+  if (p.type === 'multiselect') renderMultiSelect(p, c);
+  else if (p.type === 'mcq') renderMCQ(p, c);
+  else if (p.type === 'mcq_evidence') renderMCQEvidence(p, c);
+  else if (p.type === 'multicell') renderMultiCell(p, c);
+}
+
+// ── Shared helpers ──
+function roundHeader(p) {
+  return `<div class="round-badge">${p.roundLabel} <span class="honors-tag">HONORS</span></div>
+          <div class="puzzle-title">${p.title}</div>
+          <div class="puzzle-flavor">${p.flavor}</div>`;
+}
+
+function scenarioHTML(text) {
+  return `<div class="scenario-block">
+    <div class="scenario-label">📋 LAB SCENARIO</div>
+    ${text.split('\n').filter(l=>l.trim()).map(l=>`<p style="margin-bottom:6px;">${l}</p>`).join('')}
+  </div>`;
+}
+
+function hintHTML(idx, hintText) {
+  const shown = state.hintShown[idx];
+  return `<button class="hint-toggle" onclick="toggleHint(${idx})">
+    ${shown ? '🔒 Hide Hint' : '💡 Need a hint? (costs 50 points)'}
+  </button>
+  <div class="hint-box ${shown ? 'show' : ''}" id="hint-${idx}">
+    <strong>💡 HINT:</strong> ${hintText}
+    ${shown ? '<br><span class="hint-used">(-50 points deducted)</span>' : ''}
+  </div>`;
+}
+
+function toggleHint(idx) {
+  if (!state.hintShown[idx]) {
+    state.hintShown[idx] = true;
+    state.hintsUsed++;
+    state.score = Math.max(0, state.score - 50);
+    updateScore();
+  } else {
+    state.hintShown[idx] = false;
+  }
+  renderPuzzle();
+}
+
+// ── MULTI-SELECT (R1, R4) ──
+function renderMultiSelect(p, container) {
+  const locked = state.multiFeedbackShown;
+  const itemsHTML = p.items.map((item, i) => {
+    const isSel = state.multiSelected.includes(i);
+    let cls = 'multiselect-item';
+    let checkMark = '';
+    if (locked) {
+      if (item.correct && isSel) { cls += ' correct-sel'; checkMark = '✓'; }
+      else if (item.correct && !isSel) { cls += ' missed'; checkMark = '→'; }
+      else if (!item.correct && isSel) { cls += ' wrong-sel'; checkMark = '✗'; }
+      else { cls += ''; }
+    } else {
+      if (isSel) { cls += ' selected'; checkMark = '✓'; }
+    }
+    return `<div class="${cls}" onclick="${locked ? '' : `toggleMulti(${i})`}">
+      <div class="check-box">${checkMark}</div>
+      <div>${item.text}</div>
+    </div>`;
+  }).join('');
+
+  const allCorrectSelected = p.correctIndices.every(i => state.multiSelected.includes(i));
+  const noWrongSelected = !state.multiSelected.some(i => !p.correctIndices.includes(i));
+  const perfect = allCorrectSelected && noWrongSelected;
+  const correctHit = state.multiSelected.filter(i => p.correctIndices.includes(i)).length;
+  const wrongHit = state.multiSelected.filter(i => !p.correctIndices.includes(i)).length;
+
+  let feedbackHTML = '';
+  if (locked) {
+    const earned = Math.max(0, Math.round(((correctHit - wrongHit) / p.correctIndices.length) * p.points));
+    const cls = perfect ? 'correct-fb' : wrongHit > 0 ? 'wrong-fb' : 'partial-fb';
+    feedbackHTML = `<div class="feedback-box show ${cls}">
+      ${perfect ? '✅ Perfect!' : wrongHit > 0 ? '❌ Some incorrect selections.' : '⚠️ Close — you missed some correct answers.'}
+      You got ${correctHit}/${p.correctIndices.length} correct, ${wrongHit} wrong. (+${earned} pts)<br>
+      <small style="opacity:0.85;">${p.explanation}</small>
+    </div>`;
+  }
+
+  container.innerHTML = `
+    ${roundHeader(p)}
+    <div class="puzzle-card">
+      ${scenarioHTML(p.scenario)}
+      <div class="puzzle-question">${p.question}</div>
+      ${hintHTML(state.currentPuzzle, p.hint)}
+      <div class="multiselect-instruction">${p.instruction}</div>
+      ${itemsHTML}
+      ${feedbackHTML}
+    </div>
+    <div class="nav-row">
+      <div style="font-size:0.8rem;color:var(--dim);">🏆 Points: <strong style="color:var(--purple);">${p.points}</strong></div>
+      <div id="next-btn">
+        ${!locked
+          ? `<button class="btn btn-primary" onclick="checkMultiSelect()">CHECK ANSWERS ✓</button>`
+          : `<button class="btn btn-green" onclick="nextPuzzle()">NEXT CHALLENGE ➜</button>`}
+      </div>
+    </div>`;
+}
+
+function toggleMulti(i) {
+  if (state.multiSelected.includes(i)) {
+    state.multiSelected = state.multiSelected.filter(x => x !== i);
+  } else {
+    state.multiSelected.push(i);
+  }
+  renderPuzzle();
+}
+
+function checkMultiSelect() {
+  const p = PUZZLES[state.currentPuzzle];
+  const correctHit = state.multiSelected.filter(i => p.correctIndices.includes(i)).length;
+  const wrongHit = state.multiSelected.filter(i => !p.correctIndices.includes(i)).length;
+  const earned = Math.max(0, Math.round(((correctHit - wrongHit) / p.correctIndices.length) * p.points));
+
+  state.totalAttempts += p.correctIndices.length;
+  state.correctAnswers += correctHit;
+  state.score += earned;
+  state.codeRevealed.push(p.codeDigit);
+  state.multiFeedbackShown = true;
+  updateScore();
+  renderPuzzle();
+}
+
+// ── MCQ (R2) ──
+function renderMCQ(p, container) {
+  const letters = ['A','B','C','D'];
+  const choicesHTML = p.choices.map((c, i) =>
+    `<button class="choice-btn" id="choice-${i}" onclick="answerMCQ(${i})">
+      <span class="choice-letter">${letters[i]}</span><span>${c}</span>
+    </button>`
+  ).join('');
+
+  container.innerHTML = `
+    ${roundHeader(p)}
+    <div class="puzzle-card">
+      ${scenarioHTML(p.scenario)}
+      <div class="puzzle-question">${p.question}</div>
+      ${hintHTML(state.currentPuzzle, p.hint)}
+      <div class="choices">${choicesHTML}</div>
+      <div class="feedback-box" id="feedback"></div>
+    </div>
+    <div class="nav-row">
+      <div style="font-size:0.8rem;color:var(--dim);">🏆 Points: <strong style="color:var(--purple);">${p.points}</strong></div>
+      <div id="next-btn"></div>
+    </div>`;
+}
+
+function answerMCQ(idx) {
+  const p = PUZZLES[state.currentPuzzle];
+  state.totalAttempts++;
+  const correct = idx === p.answer;
+  if (correct) { state.correctAnswers++; state.score += p.points; }
+  state.codeRevealed.push(p.codeDigit);
+  updateScore();
+
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === p.answer) btn.classList.add('correct');
+    else if (i === idx && !correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback-box show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = (correct ? '✅ ' : '❌ ') + `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${p.explanation}`;
+
+  document.getElementById('next-btn').innerHTML =
+    `<button class="btn btn-green" onclick="nextPuzzle()">NEXT CHALLENGE ➜</button>`;
+}
+
+// ── MCQ WITH EVIDENCE CARDS (R3) ──
+function renderMCQEvidence(p, container) {
+  const letters = ['A','B','C','D'];
+  const evHTML = p.evidenceCards.map(e =>
+    `<div class="evidence-card">
+      <div class="ev-num">📄 ${e.num}</div>
+      <div>${e.text}</div>
+    </div>`
+  ).join('');
+
+  const choicesHTML = p.choices.map((c, i) =>
+    `<button class="choice-btn" id="choice-${i}" onclick="answerMCQEvidence(${i})">
+      <span class="choice-letter">${letters[i]}</span><span>${c}</span>
+    </button>`
+  ).join('');
+
+  container.innerHTML = `
+    ${roundHeader(p)}
+    <div class="puzzle-card">
+      ${scenarioHTML(p.scenario)}
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:3px;color:var(--warn);margin-bottom:10px;">🔎 SCIENTIFIC EVIDENCE ON FILE:</div>
+      <div class="evidence-cards">${evHTML}</div>
+      <hr class="divider">
+      <div class="puzzle-question">${p.question}</div>
+      ${hintHTML(state.currentPuzzle, p.hint)}
+      <div class="choices">${choicesHTML}</div>
+      <div class="feedback-box" id="feedback"></div>
+    </div>
+    <div class="nav-row">
+      <div style="font-size:0.8rem;color:var(--dim);">🏆 Points: <strong style="color:var(--purple);">${p.points}</strong></div>
+      <div id="next-btn"></div>
+    </div>`;
+}
+
+function answerMCQEvidence(idx) {
+  const p = PUZZLES[state.currentPuzzle];
+  state.totalAttempts++;
+  const correct = idx === p.answer;
+  if (correct) { state.correctAnswers++; state.score += p.points; }
+  state.codeRevealed.push(p.codeDigit);
+  updateScore();
+
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === p.answer) btn.classList.add('correct');
+    else if (i === idx && !correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback-box show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = (correct ? '✅ ' : '❌ ') + `<strong>${correct ? 'Well-reasoned!' : 'Not the strongest argument.'}</strong> ${p.explanation}`;
+
+  document.getElementById('next-btn').innerHTML =
+    `<button class="btn btn-green" onclick="nextPuzzle()">NEXT CHALLENGE ➜</button>`;
+}
+
+// ── MULTI-CELL (R5) ──
+function renderMultiCell(p, container) {
+  const cellsHTML = p.cells.map(cell => {
+    const ans = state.cellAnswers[cell.id];
+    const locked = ans !== null && ans !== undefined;
+    const correct = ans === cell.answer;
+
+    let feedbackInner = '';
+    if (locked) {
+      const cls = correct ? 'color:var(--accent2)' : 'color:#ff8fa3';
+      feedbackInner = `<div class="cell-card-feedback show" style="${cls};">
+        ${correct ? '✅' : '❌'} ${cell.explanation}
+      </div>`;
+    }
+
+    return `<div class="cell-card ${locked ? (correct ? 'answered-correct' : 'answered-wrong') : ''}">
+      <div class="cell-card-num">🔬 SPECIMEN ${cell.id}</div>
+      <div class="cell-card-desc">${cell.desc}</div>
+      <div class="cell-card-choices">
+        <button class="cell-choice-btn ${locked && cell.answer==='plant' ? 'correct' : (locked && ans==='plant' && !correct ? 'wrong' : '')}"
+          ${locked ? 'disabled' : ''} onclick="answerCell('${cell.id}','plant')">🌿 Plant Cell</button>
+        <button class="cell-choice-btn ${locked && cell.answer==='animal' ? 'correct' : (locked && ans==='animal' && !correct ? 'wrong' : '')}"
+          ${locked ? 'disabled' : ''} onclick="answerCell('${cell.id}','animal')">🐾 Animal Cell</button>
+      </div>
+      ${feedbackInner}
+    </div>`;
+  }).join('');
+
+  const allAnswered = p.cells.every(cell => state.cellAnswers[cell.id] !== undefined);
+  const correctCount = p.cells.filter(cell => state.cellAnswers[cell.id] === cell.answer).length;
+  const earned = allAnswered ? Math.round((correctCount / p.cells.length) * p.points) : 0;
+
+  container.innerHTML = `
+    ${roundHeader(p)}
+    <div class="puzzle-card">
+      <div class="puzzle-question">${p.question}</div>
+      ${hintHTML(state.currentPuzzle, p.hint)}
+    </div>
+    <div class="cell-cards-grid">${cellsHTML}</div>
+    ${allAnswered ? `<div style="text-align:center;font-family:'Share Tech Mono',monospace;color:var(--purple);margin-bottom:12px;">
+      ${correctCount}/${p.cells.length} cells correctly identified — +${earned} pts
+    </div>` : ''}
+    <div class="nav-row">
+      <div style="font-size:0.8rem;color:var(--dim);">🏆 Points: <strong style="color:var(--purple);">${p.points}</strong></div>
+      <div id="next-btn">
+        ${allAnswered ? `<button class="btn btn-green" onclick="completeMultiCell()">🚀 ESCAPE THE LAB!</button>` : ''}
+      </div>
+    </div>`;
+}
+
+function answerCell(cellId, answer) {
+  const p = PUZZLES[state.currentPuzzle];
+  state.cellAnswers[cellId] = answer;
+  state.totalAttempts++;
+  const cell = p.cells.find(c => c.id === cellId);
+  if (answer === cell.answer) state.correctAnswers++;
+  renderPuzzle();
+}
+
+function completeMultiCell() {
+  const p = PUZZLES[state.currentPuzzle];
+  const correctCount = p.cells.filter(cell => state.cellAnswers[cell.id] === cell.answer).length;
+  const earned = Math.round((correctCount / p.cells.length) * p.points);
+  state.score += earned;
+  state.codeRevealed.push(p.codeDigit);
+  updateScore();
+  showWin(false);
+}
+
+// =====================================================
+//  NAVIGATION
+// =====================================================
+function nextPuzzle() {
+  state.currentPuzzle++;
+  state.multiSelected = [];
+  state.multiFeedbackShown = false;
+  if (state.currentPuzzle >= PUZZLES.length) showWin(false);
+  else renderPuzzle();
+  window.scrollTo(0, 0);
+}
+
+// =====================================================
+//  WIN
+// =====================================================
+function showWin(timeout) {
+  clearInterval(state.timerInterval);
+  const timeLeft = `${Math.floor(state.secondsLeft/60)}:${String(state.secondsLeft%60).padStart(2,'0')}`;
+  const accuracy = state.totalAttempts > 0
+    ? Math.round((state.correctAnswers / state.totalAttempts) * 100) + '%' : '—';
+
+  document.getElementById('finalScore').textContent = state.score;
+  document.getElementById('finalTime').textContent = timeout ? '⏰ TIME UP' : timeLeft;
+  document.getElementById('finalHints').textContent = state.hintsUsed;
+  document.getElementById('finalAccuracy').textContent = accuracy;
+  if (timeout) document.getElementById('winSub').textContent = "Time's up — but you made it through!";
+
+  showScreen('win');
+  spawnConfetti();
+}
+
+function spawnConfetti() {
+  const wrap = document.getElementById('confettiWrap');
+  const colors = ['#c084fc','#a78bfa','#00d4ff','#ffd700','#39ff14','#ff6b35'];
+  for (let i = 0; i < 90; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDuration = (2 + Math.random() * 3) + 's';
+    p.style.animationDelay = (Math.random() * 2) + 's';
+    wrap.appendChild(p);
+  }
+  setTimeout(() => { wrap.innerHTML = ''; }, 6000);
+}
+
+function restartGame() { showScreen('intro'); }
+
+// =====================================================
+//  TEACHER KEY
+// =====================================================
+function showTeacherKey() {
+  const fullCode = PUZZLES.map(p => p.codeDigit).join('-');
+  const rounds = PUZZLES.map(p => {
+    let answerBlock = '';
+    if (p.type === 'multiselect') {
+      const correct = p.correctIndices.map(i => `<li style="margin-bottom:4px;">${p.items[i].text.substring(0,80)}...</li>`).join('');
+      answerBlock = `<strong>Correct selections (${p.correctIndices.length}):</strong><ul style="margin:6px 0 0 16px;">${correct}</ul>`;
+    } else if (p.type === 'mcq' || p.type === 'mcq_evidence') {
+      answerBlock = `<strong>Answer:</strong> ${String.fromCharCode(65+p.answer)} — ${p.choices[p.answer].substring(0,100)}...`;
+    } else if (p.type === 'multicell') {
+      answerBlock = p.cells.map(c => `<div>Specimen ${c.id}: <strong style="color:#39ff14;">${c.answer.toUpperCase()} CELL</strong></div>`).join('');
+    }
+    return `<div style="margin-bottom:18px;padding:14px;background:var(--panel2);border-radius:8px;border-left:3px solid var(--purple);">
+      <div style="font-family:'Orbitron',monospace;color:var(--purple);font-size:0.8rem;margin-bottom:4px;">
+        ${p.roundLabel} — Code Digit: <strong style="color:var(--gold);">${p.codeDigit}</strong> (${p.points} pts max)
+      </div>
+      <div style="font-weight:700;margin-bottom:8px;">${p.title}</div>
+      <div style="font-size:0.88rem;">${answerBlock}</div>
+      <div style="margin-top:8px;font-size:0.82rem;color:var(--dim);">${p.explanation || ''}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('teacherKeyContent').innerHTML = `
+    <div style="background:rgba(255,215,0,0.1);border:1px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--dim);margin-bottom:4px;">HONORS ESCAPE CODE</div>
+      <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:8px;">${fullCode}</div>
+    </div>
+    ${rounds}
+    <div style="font-size:0.85rem;color:var(--dim);margin-top:16px;padding:12px;background:var(--panel2);border-radius:6px;">
+      <strong style="color:var(--purple);">NGSS:</strong> MS-LS1-1 &nbsp;|&nbsp;
+      <strong style="color:var(--purple);">SEP:</strong> Analyzing &amp; Interpreting Data, Constructing Explanations &nbsp;|&nbsp;
+      <strong style="color:var(--purple);">CCC:</strong> Structure and Function, Cause and Effect<br><br>
+      <strong style="color:var(--warn);">Debrief suggestions:</strong> "What made Round 3 (virus) the hardest?" / "Could you design a better experiment for Round 4?" / "What would you need to see to change your answer on Round 5?"
+    </div>`;
+
+  document.getElementById('teacherModal').style.display = 'block';
+}
+</script>
+</body>
+</html>
